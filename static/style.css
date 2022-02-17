@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;700&display=swap');
+
+html {
+    overflow: hidden;
+}
+
+#fname, #lname {
+    font-size: 300%;
+    padding: 50px;
+    text-align: center;
+}
+
+#race_header {
+    padding: 15px 0;
+}
+
+.btn-yellow {
+    background-color: #f0ce0c;
+    border: 1px solid #99a100;
+    color: white;
+}
+
+.btn-yellow:hover {
+    background-color: #d4b713;
+    border: 1px solid #99a100;
+}
+
+#racerButton, #placeButton {
+    height: 90%;
+}
+
+#racerButton .row, #placeButton .row {
+    height: 10%;
+}
+
+#racerButton .row button, #placeButton .row button {
+    height: 80%;
+    width: 100%;
+    font-size: 200%;
+}
+
+#racerButton .row button {
+    color:white;
+}
+
+#advancing {
+    height: 45%;
+    text-align: center;
+    border: 1px solid gray;
+    background-color: #e0e0e0;
+}
+
+#advancing .row {
+    height: 25%;
+}
+
+#advancing .row button {
+    height: 80%;
+    width: 80%;
+    font-size: 200%;
+    text-align: center;
+    color: white;
+}

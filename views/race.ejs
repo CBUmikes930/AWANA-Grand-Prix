@@ -1,0 +1,46 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+    <div class="jumbotron text-center" id="race_header">
+        <h1>Heat #1</h1>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <!-- Create a racer button for each racer passed into the ejs -->
+    <div class="col-md-4" id="racerButton">
+        <% i = 1 %>
+        <% racers.forEach((racer) => { %>
+            <div class="row">
+                <button type="button" class="btn racerButton" id="racerButton-<%= i++ %>"><%= racer.fname %> <%= racer.lname %></button>
+            </div>
+        <% }) %>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <!-- Create a place button that shows what place they got in the race -->
+    <div class="col-md-1" id="placeButton">
+        <% for (let i = 1; i <= 8; i++) { %>
+            <div class="row">
+                <button type="button" class="btn btn-secondary placeButton" id="placeButton-<%= i %>"><%= i %></button>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <!-- Create an advancing button based on the number of racers to show who is advancing -->
+    <div class="col-md-3" id="advancing">
+        <div class="row">
+            <h1>Advancing</h1>
+        </div>
+        <% for (let i = 1; i <= Math.ceil(racers.length / 3); i++) { %>
+            <div class="row">
+                <button type="button" class="btn advancingButton" id="advancingButton-<%= i %>">Racer #<%= i %></button>
+            </div>
+        <% } %>
+    </div>
+</body>
+</html>
