@@ -24,7 +24,6 @@ app.listen(3000, () => {
 /**
  * Routes
  */
-
 app.route('/').get(async (req, res) => {
     // Get a list of all Racers
     let users = await racerService.getRegisteredUsers();
@@ -71,42 +70,107 @@ let numRaces = [];
 let curRace = 1;
 let curGroup = 1;
 
-app.route('/race').get(async (req, res) => {
-    let result = await racerService.getTotalRacersInGroupByRace("Heat 1");
+let raceDestinations = {
+    "Heat 1": {
+        "Winners": "Heat 2 Upper",
+        "Losers": "Heat 2 Lower"
+    },
+    "Heat 2 Upper": {
+        "Winners": "Semi-Finals",
+        "Losers": "Heat 2 Lower"
+    },
+    "Heat 2 Lower": {
+        "Winners": "Semi-Finals",
+        "Losers": "Out"
+    },
+    "Semi-Finals": {
+        "Winners": "Finals",
+        "Losers": "Out"
+    },
+    "Finals": {
+        "Winners": "Winners",
+        "Losers": "Out"
+    }
+}
+let currentRaceType = 0;
+
+app.route('/reset').get(async (req, res) => {
+    currentRaceType = 0;
+    
+    let result = await racerService.getTotalRacersInGroupByRace(Object.keys(raceDestinations)[currentRaceType]);
+    
     max = Math.max(...result);
     numRaces = result.map(i => Math.ceil(max / (i + 1)));
+    curRace = 1;
+    curGroup = 1;
 
-    result = await racerService.getNextRacers(1);
-    console.log(result);
-
-    res.render('race', { title: 'Races', static: ".", script: "raceScript.js", racers: result });
+    res.redirect('/race');
 });
 
-app.route('/submitResults').post(async (req, res) => {
-    raceResults = req.body.raceResults;
-    // Get the winners
-    console.log("Winners: " + raceResults.slice(0, Math.ceil(raceResults.length / 3)));
-    // Get the losers
-    console.log("Losers: " + raceResults.slice(Math.ceil(raceResults.length / 3)));
-});
-
-app.route('/test').get(async (req, res) => {
+app.route('/race').get(async (req, res) => {
     for (let i = curRace; i <= max + 1; i++) {
         for (let j = curGroup; j <= 3; j++) {
             if ((i % numRaces[(j - 1 % 3)]) === 0) {
-                let response = "Race " + i + " Group " + j
+                let response = "Race " + i + " Group " + j;
                 console.log(response);
-                curRace = i;
-                curGroup = j + 1;
-                if (curGroup > 3) {
+
+                let raceName = Object.keys(raceDestinations)[currentRaceType];
+                let result = await racerService.getNextRacers(raceName, j);
+
+                if (result.length > 0) {
+                    curRace = i;
+                    curGroup = j + 1;
+
+                    if (curGroup > 3) {
+                        curGroup = 1;
+                        curRace++;
+                    }
+                    
+                    return res.render('race', { title: 'Races', static: ".", script: "raceScript.js", racers: result, raceName: raceName });
+                } else {
+                    currentRaceType++;
+
+                    let result = await racerService.getTotalRacersInGroupByRace(Object.keys(raceDestinations)[currentRaceType]);
+                    
+                    max = Math.max(...result);
+                    numRaces = result.map(i => Math.ceil(max / (i + 1)));
+                    curRace = 1;
                     curGroup = 1;
-                    curRace++;
-                }
                 
-                return res.send(response);
+                    return res.redirect('/race');
+                }
             }
         }
     }
-    console.log("Completed");
-    return res.send("Completed");
+    let result = await racerService.getWinners();
+    return res.send(result);
+});
+
+app.route('/submitResults').post(async (req, res) => {
+    let raceResults = req.body.raceResults;
+    let curRaceName = Object.keys(raceDestinations)[currentRaceType];
+    let numWinners =  curRaceName === "Finals" ? 3 : Math.ceil(raceResults.length / 3);
+    let raceDest = raceDestinations[curRaceName];
+
+    let result = racerService.addRace({ type: curRaceName, group: curGroup === 1 ? 3 : curGroup - 1, results: raceResults, numWinners: numWinners, raceDest: raceDest });
+    console.log(result);
+
+    for (let i = 0; i < raceResults.length; i++) {
+        result = raceDest[i < numWinners ? "Winners" : "Losers"];
+
+        racerService.updateRacer(raceResults[i], result, curRaceName === "Finals" ? i + 1 : undefined);
+    }
+
+    res.send(JSON.stringify("{ result: \"Completed\" }"));
+});
+
+app.route('/getRaceHistory').get(async (req, res) => {
+    let races = await racerService.getRaces();
+    return res.render('history', { title: 'History', static: '.', script: 'script.js', races: races });
+});
+
+app.route('/deleteAllRacers').get(async (req, res) => {
+    racerService.deleteAllRacers();
+    racerService.deleteAllRaces();
+    res.send("Deleted");
 });

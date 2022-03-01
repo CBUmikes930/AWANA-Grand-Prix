@@ -6,7 +6,8 @@ let RacerSchema = new Schema({
     lname: String,
     group: Number,
     number: Number,
-    status: String
+    status: String,
+    place: Number
 });
 
 module.exports = mongoose.model('racer', RacerSchema);

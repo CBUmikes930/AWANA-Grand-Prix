@@ -2,7 +2,7 @@ console.log("raceScript.js loaded");
 
 let curNumber = 0;
 let places = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
-let colors = ["btn-danger", "btn-primary", "btn-success", "btn-yellow"];
+let colors = ["btn-red", "btn-primary", "btn-success", "btn-yellow"];
 let order = [];
 
 $(document).ready(() => {
@@ -66,11 +66,12 @@ function racerButton(number) {
 
     $("#racerButton-" + number).off("click");
 
-    order.push($("#racerButton-" + number).html());
+    order.push($("#racerID-" + number).val());
 }
 
 function submitResults() {
     console.log(order);
+
     fetch('/submitResults', {
         method: 'POST',
         headers: {
@@ -79,5 +80,8 @@ function submitResults() {
         body: JSON.stringify({
             raceResults: order
         })
-    });
+    }).then(response => response.json())
+    .then(json => {
+        window.location.reload();
+    }).catch(err => console.log("Error: " + err));
 }

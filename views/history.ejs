@@ -1,0 +1,47 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+    <div class="jumbotron text-center" id="race_header">
+        <h1>Race History</h1>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <div class="col-md-10 text-center" id="history_table">
+        <div class="row" id="super_header">
+            <div class="col-md-4">&nbsp;</div>
+            
+            <div class="col-md-8">Results</div>
+        </div>
+
+        <div class="row" id="header">
+            <div class="col-md-2">Type</div>
+            <div class="col-md-1">Group</div>
+            <div class="col-md-1">Number</div>
+            <div class="col-md-1">1st Place</div>
+            <div class="col-md-1">2nd Place</div>
+            <div class="col-md-1">3rd Place</div>
+            <div class="col-md-1">4th Place</div>
+            <div class="col-md-1">5th Place</div>
+            <div class="col-md-1">6th Place</div>
+            <div class="col-md-1">7th Place</div>
+            <div class="col-md-1">8th Place</div>
+        </div>
+
+        <% races.forEach((race) => { %>
+            <div class="row">
+                <div class="col-md-2"><strong><%= race.type %></strong></div>
+                <div class="col-md-1"><%= race.group %></div>
+                <div class="col-md-1"><%= race.number %></div>
+            
+                <% for (let i = 0; i < race.results.length; i++) { %>
+                    <% let racer = race.results[i]; %>
+
+                    <div class="col-md-1 <%= i < race.numWinners ? "winner" : "loser" %>" title="Advance to <%= i < race.numWinners ? race.raceDest.Winners : race.raceDest.Losers %>">#<%= racer.number %>: <%= racer.fname %> <%= racer.lname %></div>
+                <% } %>
+            </div>
+        <% }) %>
+    </div>
+</body>
+</html>
