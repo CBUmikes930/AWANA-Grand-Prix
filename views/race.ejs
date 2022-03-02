@@ -13,7 +13,7 @@
         <% i = 1 %>
         <% racers.forEach((racer) => { %>
             <div class="row">
-                <button style="color: black" type="button" class="btn racerButton" id="racerButton-<%= i %>">#<%= racer.number %> <%= racer.fname %> <%= racer.lname %></button>
+                <button style="color: black" type="button" class="btn racerButton" id="racerButton-<%= i %>">#<%= racer.number %>: <%= racer.fname %> <%= racer.lname %></button>
                 <input type="hidden" id="racerID-<%= i++ %>" value="<%= racer._id %>">
             </div>
         <% }) %>
@@ -35,11 +35,12 @@
     <!-- Create an advancing button based on the number of racers to show who is advancing -->
     <div class="col-md-3" id="advancing">
         <div class="row">
-            <h1><%= raceName === "Finals" ? "Winners" : "Advancing" %></h1>
+            <h1>&nbsp;<%= raceName === "Finals" ? "Winners" : "Advancing" %>&nbsp;</h1>
         </div>
-        <% for (let i = 1; i <= (raceName === "Finals" ? 3 : Math.ceil(racers.length / 3)); i++) { %>
+        <% let numAdvancing = (numWinners === undefined ? (raceName === "Finals" ? 3 : Math.ceil(racers.length / 3)) : (numWinners <= 2 ? 3 : Math.ceil(racers.length / 3))) %>
+        <% for (let i = 1; i <= numAdvancing; i++) { %>
             <div class="row">
-                <button type="button" class="btn advancingButton" id="advancingButton-<%= i %>">Racer #<%= i %></button>
+                <button type="button"  style="color: black" class="btn advancingButton" id="advancingButton-<%= i %>">Racer #<%= i %></button>
             </div>
         <% } %>
     </div>

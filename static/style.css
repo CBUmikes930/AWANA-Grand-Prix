@@ -2,6 +2,7 @@
 
 html {
     overflow: hidden;
+    background-image: url("background_2.jpg");
 }
 
 #fname, #lname {
@@ -51,19 +52,25 @@ html {
     height: 45%;
     text-align: center;
     border: 1px solid gray;
-    background-color: #e0e0e0;
+    background-color: #e0e0e0c0;
 }
 
 #advancing .row {
     height: 25%;
 }
 
+#advancing .row h1 {
+    font-size: 350%;
+    color: black;
+    text-decoration: underline;
+}
+
 #advancing .row button {
     height: 80%;
-    width: 80%;
-    font-size: 200%;
+    width: 90%;
+    font-size: 250%;
     text-align: center;
-    color: white;
+    color: black;
 }
 
 #history_table {

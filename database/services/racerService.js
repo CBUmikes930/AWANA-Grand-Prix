@@ -29,6 +29,22 @@ module.exports.getNextRacers = async (status, groupNum) => {
     try {
         // Get a list of racers in the given group
         let result = await RacerModel.find({ status: status, group: groupNum });
+
+        if (true) {
+            let currentIndex = result.length, randomIndex;
+
+            // While there remain elements to shuffle...
+            while (currentIndex != 0) {
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+
+                // And swap it with the current element.
+                [result[currentIndex], result[randomIndex]] = [
+                result[randomIndex], result[currentIndex]];
+            }
+        }
+
         return result.slice(0, Math.ceil(result.length / Math.ceil(result.length / 8)));
     } catch (error) {
         console.log("Something went wrong with getNextRacers", error);
@@ -96,6 +112,9 @@ module.exports.deleteAllRacers = async () => {
     }
 }
 
+
+
+
 module.exports.getRegisteredUsers = async (filter) => {
     try {
         let result = await RegisteredModel.find(filter);
@@ -115,6 +134,19 @@ module.exports.deleteRegisteredUser = async (filter) => {
         throw new Error(error);
     }
 }
+
+module.exports.deleteAllRegisteredUsers = async () => {
+    try {
+        let result = await RegisteredModel.deleteMany({});
+        return result;
+    } catch (error) {
+        console.log("Something went wrong with deleteAllRegisteredUsers", error);
+        throw new Error(error);
+    }
+}
+
+
+
 
 module.exports.addRace = async (content) => {
     try {

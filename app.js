@@ -93,6 +93,7 @@ let raceDestinations = {
     }
 }
 let currentRaceType = 0;
+let numSemiFinalRaces;
 
 app.route('/reset').get(async (req, res) => {
     currentRaceType = 0;
@@ -103,6 +104,8 @@ app.route('/reset').get(async (req, res) => {
     numRaces = result.map(i => Math.ceil(max / (i + 1)));
     curRace = 1;
     curGroup = 1;
+
+    numSemiFinalRaces = undefined;
 
     res.redirect('/race');
 });
@@ -118,6 +121,7 @@ app.route('/race').get(async (req, res) => {
                 let result = await racerService.getNextRacers(raceName, j);
 
                 if (result.length > 0) {
+                    let numWinners = numSemiFinalRaces === undefined ? undefined : numSemiFinalRaces[curGroup - 1];
                     curRace = i;
                     curGroup = j + 1;
 
@@ -125,13 +129,20 @@ app.route('/race').get(async (req, res) => {
                         curGroup = 1;
                         curRace++;
                     }
-                    
-                    return res.render('race', { title: 'Races', static: ".", script: "raceScript.js", racers: result, raceName: raceName });
+
+                    return res.render('race', { title: 'Races', static: ".", script: "raceScript.js", racers: result, raceName: raceName, numWinners: numWinners });
                 } else {
                     currentRaceType++;
 
                     let result = await racerService.getTotalRacersInGroupByRace(Object.keys(raceDestinations)[currentRaceType]);
                     
+                    if (Object.keys(raceDestinations)[currentRaceType] === "Semi-Finals") {
+                        let racers = await racerService.getTotalRacersInGroupByRace("Semi-Finals");
+                        console.log("Number of racers: " + racers);
+                        numSemiFinalRaces = racers.map(i => Math.ceil(i / 8));
+                        console.log("Number of semi-final races: " + numSemiFinalRaces);
+                    }
+
                     max = Math.max(...result);
                     numRaces = result.map(i => Math.ceil(max / (i + 1)));
                     curRace = 1;
@@ -149,7 +160,24 @@ app.route('/race').get(async (req, res) => {
 app.route('/submitResults').post(async (req, res) => {
     let raceResults = req.body.raceResults;
     let curRaceName = Object.keys(raceDestinations)[currentRaceType];
-    let numWinners =  curRaceName === "Finals" ? 3 : Math.ceil(raceResults.length / 3);
+    let numWinners;
+    if (curRaceName === "Finals") {
+        numWinners = 3;
+    } else if (curRaceName === "Semi-Finals") {
+        // If this is the first round of semi final races, figure out how many racers there are in each category
+        /*
+        if (numSemiFinalRaces === undefined) {
+            let racers = await racerService.getTotalRacersInGroupByRace(curRaceName);
+            console.log("Number of racers: " + racers);
+            numSemiFinalRaces = racers.map(i => Math.ceil(i / 8));
+            console.log("Number of semi-final races: " + numSemiFinalRaces);
+        }
+        */
+        numWinners = numSemiFinalRaces[curGroup === 1 ? 2 : curGroup - 2] <= 2 ? 3 : Math.ceil(raceResults.length / 3);
+        console.log("Semi-Final Winners: " + numWinners);
+    } else {
+        numWinners = Math.ceil(raceResults.length / 3);
+    }
     let raceDest = raceDestinations[curRaceName];
 
     let result = racerService.addRace({ type: curRaceName, group: curGroup === 1 ? 3 : curGroup - 1, results: raceResults, numWinners: numWinners, raceDest: raceDest });
@@ -164,13 +192,14 @@ app.route('/submitResults').post(async (req, res) => {
     res.send(JSON.stringify("{ result: \"Completed\" }"));
 });
 
-app.route('/getRaceHistory').get(async (req, res) => {
+app.route('/raceHistory').get(async (req, res) => {
     let races = await racerService.getRaces();
     return res.render('history', { title: 'History', static: '.', script: 'script.js', races: races });
 });
 
-app.route('/deleteAllRacers').get(async (req, res) => {
+app.route('/deleteAllData').get(async (req, res) => {
     racerService.deleteAllRacers();
     racerService.deleteAllRaces();
+    racerService.deleteAllRegisteredUsers();
     res.send("Deleted");
 });
