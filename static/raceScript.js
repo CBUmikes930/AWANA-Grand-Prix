@@ -15,7 +15,9 @@ $(document).ready(() => {
     if (e.code === "Escape") {
         reset();
     } else if (e.code === "Enter") {
-        submitResults();
+        if (order.length === $(".racerButton").length) {
+            submitResults();
+        }
     }
 });
 

@@ -154,7 +154,8 @@ app.route('/race').get(async (req, res) => {
         }
     }
     let result = await racerService.getWinners();
-    return res.send(result);
+    return res.redirect('/raceHistory');
+    //return res.send(result);
 });
 
 app.route('/submitResults').post(async (req, res) => {
@@ -164,15 +165,6 @@ app.route('/submitResults').post(async (req, res) => {
     if (curRaceName === "Finals") {
         numWinners = 3;
     } else if (curRaceName === "Semi-Finals") {
-        // If this is the first round of semi final races, figure out how many racers there are in each category
-        /*
-        if (numSemiFinalRaces === undefined) {
-            let racers = await racerService.getTotalRacersInGroupByRace(curRaceName);
-            console.log("Number of racers: " + racers);
-            numSemiFinalRaces = racers.map(i => Math.ceil(i / 8));
-            console.log("Number of semi-final races: " + numSemiFinalRaces);
-        }
-        */
         numWinners = numSemiFinalRaces[curGroup === 1 ? 2 : curGroup - 2] <= 2 ? 3 : Math.ceil(raceResults.length / 3);
         console.log("Semi-Final Winners: " + numWinners);
     } else {
