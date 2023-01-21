@@ -15,7 +15,7 @@ dbConnection();
 // Import database services
 const racerService = require('./database/services/racerService');
 
-
+// Start the server
 app.listen(3000, () => {
     console.log("Listening on port 3000");
 });
@@ -25,12 +25,13 @@ app.listen(3000, () => {
  * Routes
  */
 app.route('/').get(async (req, res) => {
-    // Get a list of all Racers
+    // Get a list of all registered participants
     let users = await racerService.getRegisteredUsers();
     let newRacers = {
         'fnames': {},
         'lnames': {}
     };
+    // For each participant
     users.forEach((racer) => {
         // If this is a new firstname then create an element with the firstname as the key and an empty array as the value
         if (newRacers.fnames[racer.fname] == null) {
@@ -70,6 +71,7 @@ let numRaces = [];
 let curRace = 1;
 let curGroup = 1;
 
+// A JSON object that lays out the path that the winners and losers of each race will follow
 let raceDestinations = {
     "Heat 1": {
         "Winners": "Heat 2 Upper",
@@ -162,6 +164,7 @@ app.route('/submitResults').post(async (req, res) => {
     let raceResults = req.body.raceResults;
     let curRaceName = Object.keys(raceDestinations)[currentRaceType];
     let numWinners;
+
     if (curRaceName === "Finals") {
         numWinners = 3;
     } else if (curRaceName === "Semi-Finals") {
