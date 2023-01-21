@@ -1,0 +1,24 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+    <div class="jumbotron text-center" id="race_header">
+        <h1>Current Racers</h1>
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <!-- Create a racer button for each racer passed into the ejs -->
+    <div class="col-md-10" id="racerButton">
+        <% for (let i = 1; i <= 8; i++) { %>
+            <div class="row">
+                <% let racer = racers[i - 1] %>
+                <% let html = (racer === undefined) ? "#[Num]: [FName] [LName]" : "#" + racer.number + ": " + racer.fname + " " + racer.lname %>
+                <button style="color: black; <%= (racer === undefined) ? 'display: none' : '' %>" type="button" class="btn racerButton" id="racerButton-<%= i %>"><%= html %></button>
+            </div>
+        <% } %>
+    </div>
+
+    <div class="col-md-1"></div>
+</body>
+</html>

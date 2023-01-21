@@ -3,6 +3,12 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
 
+// Socket IO
+const http = require('http');
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server);
+
 app.set('view engine', 'ejs');
 app.use(express.static('static'));
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -16,7 +22,7 @@ dbConnection();
 const racerService = require('./database/services/racerService');
 
 // Start the server
-app.listen(3000, () => {
+server.listen(3000, () => {
     console.log("Listening on port 3000");
 });
 
@@ -70,6 +76,7 @@ let max = 0;
 let numRaces = [];
 let curRace = 1;
 let curGroup = 1;
+let cur_racers = [];
 
 // A JSON object that lays out the path that the winners and losers of each race will follow
 let raceDestinations = {
@@ -131,6 +138,9 @@ app.route('/race').get(async (req, res) => {
                         curGroup = 1;
                         curRace++;
                     }
+
+                    cur_racers = result;
+                    io.emit("Current Racers", result);
 
                     return res.render('race', { title: 'Races', static: ".", script: "raceScript.js", racers: result, raceName: raceName, numWinners: numWinners });
                 } else {
@@ -197,4 +207,15 @@ app.route('/deleteAllData').get(async (req, res) => {
     racerService.deleteAllRaces();
     racerService.deleteAllRegisteredUsers();
     res.send("Deleted");
+});
+
+app.route('/curRacers').get(async (req, res) => {
+    return res.render('cur_racers', { static: '.', script: 'curRacerScript.js', racers: cur_racers });
+})
+
+io.on('connection', (socket) => {
+    console.log("A user connected using io");
+    socket.on('disconnect', () => {
+        console.log("A user disconnected using io");
+    });
 });

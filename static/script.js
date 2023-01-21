@@ -42,6 +42,14 @@ function submit_form(group_num) {
     // Get the name from the form fields
     let fname = $("#fname").val();
     let lname = $("#lname").val();
+
+    if (fname === "" || lname === "") {
+        let res = confirm("You are about to assign a racer to a group without a full name. Are you sure you want to continue?");
+
+        if (!res) {
+            return;
+        }
+    }
     
     // Set the color of the popup based on the group number
     switch (group_num) {

@@ -5,6 +5,8 @@ let places = ["1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th"];
 let colors = ["btn-red", "btn-primary", "btn-success", "btn-yellow"];
 let order = [];
 
+let socket = io();
+
 $(document).ready(() => {
     reset();
 
