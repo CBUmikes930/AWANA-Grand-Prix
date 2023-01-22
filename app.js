@@ -31,6 +31,10 @@ server.listen(3000, () => {
  * Routes
  */
 app.route('/').get(async (req, res) => {
+    res.render('index', { title: 'Home', static: ".", script: "index.js" });
+});
+
+app.route('/addRacer').get(async ( req, res) => {
     // Get a list of all registered participants
     let users = await racerService.getRegisteredUsers();
     let newRacers = {
@@ -54,10 +58,8 @@ app.route('/').get(async (req, res) => {
         newRacers.lnames[racer.lname].push(racer.fname);
     });
     // Send racers as an ejs param to be used in the view
-    res.render('index', { title: 'Home', static: ".", script: "script.js", racers: newRacers });
-});
-
-app.route('/addRacer').post(async (req, res) => {
+    res.render('add_racer', { title: 'Home', static: ".", script: "addRacer.js", racers: newRacers });
+}).post(async (req, res) => {
     // Log the event
     console.log("Add Racer:");
     console.log("\tName: " + req.body.fname + " " + req.body.lname)
@@ -202,11 +204,11 @@ app.route('/raceHistory').get(async (req, res) => {
     return res.render('history', { title: 'History', static: '.', script: 'script.js', races: races });
 });
 
-app.route('/deleteAllData').get(async (req, res) => {
+app.route('/deleteAllData').delete(async (req, res) => {
     racerService.deleteAllRacers();
     racerService.deleteAllRaces();
     racerService.deleteAllRegisteredUsers();
-    res.send("Deleted");
+    res.send({ res: "Deleted" });
 });
 
 app.route('/curRacers').get(async (req, res) => {

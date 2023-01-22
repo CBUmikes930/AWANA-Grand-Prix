@@ -7,75 +7,27 @@
         <p>Welcome Clubbers and Families</p> 
     </div>
 
-    <div class="row justify-content-center">
-        <div class="col-md-3"></div>
-        <form class="col-md-6">
-            <div class="row justify-content-center">
-                <div class="col-md-12 justify-content-center">
-                    <input list="fnames" name="fname" id="fname" placeholder="First Name" class="form-control">
-                    
-                    <% if (racers.fnames.length !== 0 ) { %>
-                        <datalist id="fnames">
-                            <% let fnames = Object.keys(racers.fnames) %>
-                            <% fnames.forEach((fname) => { %>
-                                <% let lnames = racers.fnames[fname] %>
-                                <% lnames = String(lnames).replace(",", " ") %>
-                                <option id="<%= fname %>" class="<%= lnames %>" value="<%= fname %>"></option>
-                            <% }) %>
-                        </datalist>
-                    <% } %>
-                </div>
-            </div>
-            <br>
-            <div class="row justify-content-center">
-                <div class="col-md-12">
-                    <input list="lnames" name="lname" id="lname" placeholder="Last Name" class="form-control">
+    <div class="col-md-1"></div>
 
-                    <% if (racers.lnames.length !== 0 ) { %>
-                        <datalist id="lnames">
-                            <% let lnames = Object.keys(racers.lnames) %>
-                            <% lnames.forEach((lname) => { %>
-                                <% let fnames = racers.lnames[lname] %>
-                                <% fnames = String(fnames).replace(",", " ") %>
-                                <option id="<%= lname %>" class="<%= fnames %>" value="<%= lname %>"></option>
-                            <% }) %>
-                        </datalist>
-                    <% } %>
-                </div>
-            </div>
-            <br>
-            <div class="row justify-content-center">
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <button type="button" class="btn btn-success btn-lg col-md-10" onclick="submit_form(1)">3rd / 4th</button>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <button type="button" class="btn btn-primary btn-lg col-md-10" onclick="submit_form(2)">5th / 6th</button>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="row">
-                        <div class="col-md-1"></div>
-                        <button type="button" class="btn btn-warning btn-lg col-md-10" onclick="submit_form(3)">Trek / Journey / Leaders</button>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div class="text-center w-100">
-        <a href="/reset"><button type="button" class="btn btn-secondary w-25">Go to Race Screen</button></a>
-        <br><br>
+    <div class="col-md-10" id="racerButton">
         <div class="row">
-            <div class="col-md-2"></div>
-            <div class="alert col-md-8" role="alert" id="alert">
-                <h3 id="alert-1">This is a test</h1>
-                <h3 id="alert-2">Temp</h1>
-            </div>
+            <a href="/addRacer"><button style="color: black" type="button" class="btn">Racer Registration</button></a>
+        </div>
+        <br>
+        <div class="row">
+            <a href="/curRacers"><button style="color: black" type="button" class="btn">Current Racers</button></a>
+        </div>
+        <br>
+        <div class="row">
+            <a href="/racerLookup"><button style="color: black" type="button" class="btn">Racer Lookup</button></a>
+        </div>
+        <br>
+        <div class="row">
+            <a href="/raceHistory"><button style="color: black" type="button" class="btn">Race History</button></a>
+        </div>
+        <br><br><br><br>
+        <div class="row">
+            <button style="color: black" type="button" class="btn-danger" id="delete-button">Delete Data</button>
         </div>
     </div>
 </body>
