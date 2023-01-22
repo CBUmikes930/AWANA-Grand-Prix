@@ -211,7 +211,28 @@ app.route('/deleteAllData').get(async (req, res) => {
 
 app.route('/curRacers').get(async (req, res) => {
     return res.render('cur_racers', { static: '.', script: 'curRacerScript.js', racers: cur_racers });
-})
+});
+
+app.route('/racerLookup').get(async (req, res) => {
+    return res.render('racer_lookup', { static: '.', script: 'racerLookup.js' });
+}).post(async (req, res) => {
+    let fname = req.body.fname;
+    let lname = req.body.lname;
+    let div = req.body.div;
+    let num = req.body.num;
+
+    let racers = await racerService.getRacersByFirstName({
+        fname: fname,
+        lname: lname
+    });
+
+    racers = racers.concat(await racerService.getRacersByFirstName({
+        group: div,
+        number: num
+    }));
+
+    res.send(JSON.stringify(racers));
+});
 
 io.on('connection', (socket) => {
     console.log("A user connected using io");

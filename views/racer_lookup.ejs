@@ -1,0 +1,68 @@
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body id="test">
+    <div class="jumbotron text-center">
+        <h1>AWANA Grand Prix</h1>
+        <p>Racer Lookup</p> 
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-1"></div>
+        <form class="col-md-10">
+            <div class="row justify-content-center">
+                <div class="col-md-1"></div>
+                <div class="col-md-5 justify-content-center">
+                    <input list="fnames" name="fname" id="fname" placeholder="First Name" class="form-control">
+                </div>
+
+                <div class="col-md-5">
+                    <input list="lnames" name="lname" id="lname" placeholder="Last Name" class="form-control">
+                </div>
+            </div>
+            
+            <br>
+            <div class="row justify-content-center">
+                <div class="col-md-1"></div>
+                <button type="button" class="btn btn-lg col-md-10" onclick="submit_form(1)">Lookup</button>
+            </div>
+
+            <br>
+            <div class="row justify-content-center">
+                <p style="text-align:center">OR</p>
+            </div>
+            <br>
+            
+            <div class="row justify-content-center">
+                <div class="col-md-1"></div>
+                <div class="col-md-5 justify-content-center">
+                    <select name="division" id="division" placeholder="Division" class="form-control">
+                        <option value="1" class="btn-success">3rd / 4th</option>
+                        <option value="2" class="btn-primary">5th / 6th</option>
+                        <option value="3" class="btn-warning">Trek / Journey / Leaders</option>
+                    </select>
+                </div>
+
+                <div class="col-md-5">
+                    <input name="number" id="number" placeholder="Number" class="form-control">
+                </div>
+            </div>
+            <br>
+            <div class="row justify-content-center">
+                <div class="col-md-1"></div>
+                <button type="button" class="btn btn-lg col-md-10" onclick="submit_form(2)">Lookup</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="text-center w-100">
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="alert col-md-8" role="alert" id="alert">
+                <h3 id="alert-1">This is a test</h1>
+                <h3 id="alert-2">Temp</h1>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

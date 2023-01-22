@@ -9,11 +9,24 @@ html {
     overflow: scroll;
 }
 
-#fname, #lname {
+#fname, #lname, #number {
     font-size: 350%;
     padding: 50px;
     text-align: center;
 }
+
+#division {
+    font-size: 350%;
+    height: auto;
+    margin: auto 0px;
+    text-align: left;
+}
+
+#division:hover {
+    outline: none;
+    background-color: none;
+}
+
 
 #race_header {
     padding: 15px 0;
