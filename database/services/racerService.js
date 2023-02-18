@@ -30,19 +30,17 @@ module.exports.getNextRacers = async (status, groupNum) => {
         // Get a list of racers in the given group
         let result = await RacerModel.find({ status: status, group: groupNum });
 
-        if (true) {
-            let currentIndex = result.length, randomIndex;
+        let currentIndex = result.length, randomIndex;
 
-            // While there remain elements to shuffle...
-            while (currentIndex != 0) {
-                // Pick a remaining element...
-                randomIndex = Math.floor(Math.random() * currentIndex);
-                currentIndex--;
+        // While there remain elements to shuffle...
+        while (currentIndex != 0) {
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
 
-                // And swap it with the current element.
-                [result[currentIndex], result[randomIndex]] = [
-                result[randomIndex], result[currentIndex]];
-            }
+            // And swap it with the current element.
+            [result[currentIndex], result[randomIndex]] = [
+            result[randomIndex], result[currentIndex]];
         }
 
         return result.slice(0, Math.ceil(result.length / Math.ceil(result.length / 8)));
@@ -83,7 +81,6 @@ module.exports.updateRacer = async (id, status, place) => {
         } else {
             result = await RacerModel.findOneAndUpdate({ _id: id }, { status: status, place: place });
         }
-        console.log(result);
         return result;
     } catch (error) {
         console.log("Something went wrong with updateRacer", error);
@@ -94,7 +91,6 @@ module.exports.updateRacer = async (id, status, place) => {
 module.exports.deleteRacer = async (id) => {
     try {
         let result = await RacerModel.deleteOne({ _id: id });
-        console.log(result);
         return result;
     } catch (error) {
         console.log("Something went wrong with deleteRacer", error);

@@ -14,7 +14,7 @@
         </div>
         <!-- Text header to display current race and group -->
         <div class="col-md-6">
-            <h1>Current Racers</h1>
+            <h1>Next Racers</h1>
         </div>
         <!-- Right-side checkered flag image using an svg and polygon mask to create an angled cutoff -->
         <div class="col-md-3 header_image_container">
@@ -38,6 +38,10 @@
                 <button style="color: black; <%= (racer === undefined) ? 'display: none' : '' %>" type="button" class="btn racerButton" id="racerButton-<%= i %>"><%= html %></button>
             </div>
         <% } %>
+    </div>
+
+    <div class="jumbotron text-center row" id="upNext">
+        <h1 id="upNextText">Up Next: Heat 1</h1>
     </div>
 </body>
 </html>

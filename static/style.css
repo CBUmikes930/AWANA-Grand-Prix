@@ -27,9 +27,25 @@ html {
     background-color: none;
 }
 
+#index_header {
+    padding: 0;
+}
+
+#index_header #index_title {
+    padding: 0;
+    margin: 0;
+}
 
 #race_header {
     padding: 0;
+}
+
+#race_header div h1 span {
+    padding: 0 30px;
+}
+
+#race_header div h1 span:first-of-type {
+    border-right: 3px solid black;
 }
 
 .btn-yellow {
@@ -59,6 +75,7 @@ html {
     height: 80%;
     width: 100%;
     font-size: 300%;
+    font-weight: bold;
 }
 
 #racerButton .row button {
@@ -86,6 +103,7 @@ html {
     height: 80%;
     width: 90%;
     font-size: 250%;
+    font-weight: bold;
     text-align: center;
     color: black;
 }

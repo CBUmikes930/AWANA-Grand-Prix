@@ -2,7 +2,9 @@
 <%- include("./partials/head.ejs") %>
 
 <body>
+    <!-- Header for race page -->
     <div class="jumbotron text-center row" id="race_header">
+        <!-- Left-side checkered flag image using an svg and polygon mask to create an angled cutoff -->
         <div class="col-md-3 header_image_container">
             <svg width="535" height="115" style="float:left">
                 <mask id="svgmask1">
@@ -11,9 +13,11 @@
                 <image xlink:href="<%= static %>/checkered.jpg" mask="url(#svgmask1)"></image>
             </svg>
         </div>
+        <!-- Text header to display current race and group -->
         <div class="col-md-6">
-            <h1><strong><%= raceName === "Heat 2 Upper" || raceName === "Heat 2 Lower" ? "Heat 2" : raceName %> - Group <%= racers[0].group %></strong></h1>
+            <h1><strong><span><%= raceName === "Heat 2 Upper" || raceName === "Heat 2 Lower" ? "Heat 2" : raceName %></span><span>Group <%= racers[0].group %></span></strong></h1>
         </div>
+        <!-- Right-side checkered flag image using an svg and polygon mask to create an angled cutoff -->
         <div class="col-md-3 header_image_container">
             <svg width="535" height="115" style="float:right">
                 <mask id="svgmask2">
@@ -24,6 +28,7 @@
         </div>
     </div>
 
+    <!-- Column spacer -->
     <div class="col-md-1"></div>
 
     <!-- Create a racer button for each racer passed into the ejs -->
@@ -37,6 +42,7 @@
         <% }) %>
     </div>
 
+    <!-- Column spacer -->
     <div class="col-md-1"></div>
 
     <!-- Create a place button that shows what place they got in the race -->
@@ -48,6 +54,7 @@
         <% } %>
     </div>
 
+    <!-- Column spacer -->
     <div class="col-md-1"></div>
 
     <!-- Create an advancing button based on the number of racers to show who is advancing -->

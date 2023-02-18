@@ -2,8 +2,30 @@
 <%- include("./partials/head.ejs") %>
 
 <body>
-    <div class="jumbotron text-center" id="race_header">
-        <h1>Race History</h1>
+    <div class="jumbotron text-center row" id="index_header">
+        <!-- Left-side checkered flag image using an svg and polygon mask to create an angled cutoff -->
+        <div class="col-md-3 header_image_container">
+            <svg width="535" height="115" style="float:left">
+                <mask id="svgmask1">
+                    <polygon fill="#ffffff" points="0 0, 450 0, 535 115, 0 115"></polygon>
+                </mask>
+                <image xlink:href="<%= static %>/checkered.jpg" mask="url(#svgmask1)"></image>
+            </svg>
+        </div>
+        <!-- Text header to display current race and group -->
+        <div class="col-md-6">
+            <h1 id="index_title">AWANA Grand Prix</h1>
+            <p>Race History</p>
+        </div>
+        <!-- Right-side checkered flag image using an svg and polygon mask to create an angled cutoff -->
+        <div class="col-md-3 header_image_container">
+            <svg width="535" height="115" style="float:right">
+                <mask id="svgmask2">
+                    <polygon fill="#ffffff" points="0 0, 535 0, 535 115, 85 115"></polygon>
+                </mask>
+                <image xlink:href="<%= static %>/checkered.jpg" mask="url(#svgmask2)"></image>
+            </svg>
+        </div>
     </div>
 
     <div class="col-md-1"></div>
