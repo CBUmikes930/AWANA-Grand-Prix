@@ -134,6 +134,9 @@ app.route('/race').get(async (req, res) => {
 
             // If there are racers
             if (result.length > 0) {
+                console.log(response);
+                console.log(result.length + " Racers");
+
                 // Determine the number of winners
                 let numWinners = numSemiFinalRaces === undefined ? undefined : numSemiFinalRaces[j - 1];
                 // Update the current race and group to match the race we are on
@@ -177,7 +180,8 @@ app.route('/race').get(async (req, res) => {
         await moveToNextRaceType();
         await getNextRacers();
 
-        return res.redirect('/race');
+        return res.render('race', { title: 'Races', static: ".", script: "raceScript.js", racers: null, raceName: Object.keys(raceDestinations)[currentRaceType], numWinners: 0 });
+        //return res.redirect('/race');
     }
 
     let result = await racerService.getWinners();
@@ -185,6 +189,7 @@ app.route('/race').get(async (req, res) => {
 });
 
 app.route('/submitResults').post(async (req, res) => {
+    console.log("Results Submitted");
     let raceResults = req.body.raceResults;
     let curRaceName = Object.keys(raceDestinations)[currentRaceType];
     let numWinners;
@@ -286,17 +291,37 @@ async function getNextRacers() {
 
             // If there are racers
             if (result.length > 0) {
-                console.log("Next Racers Found:", result);
-
-                // Emit the racers list using sockets to update the current racers screen
+                console.log("Next Racers Found:");
+                console.log(response);
+                console.log(result.length + " Racers");
                 next_racers = result;
-                io.emit("Next Racers", result);
 
-                for (let i = 0; i < next_racers.length; i++) {
-                    racerService.updateRacer(next_racers[i], "Up Next", undefined);
+                if (numSemiFinalRaces && numSemiFinalRaces[j - 1] === 1) {
+                    console.log("Semi Final Race skipped for Group " + j + " due to their only being 1 race");
+
+                    for (let i = 0; i < next_racers.length; i++) {
+                        racerService.updateRacer(next_racers[i], "Finals", undefined);
+                    }
+
+                    //Update the current race and group to match the race we are on
+                    curRace = i;
+                    curGroup = j + 1;
+
+                    // If we have looped through all of the groups, return to group one
+                    if (curGroup > 3) {
+                        curGroup = 1;
+                        curRace++;
+                    }
+                } else {
+                    // Emit the racers list using sockets to update the current racers screen
+                    io.emit("Next Racers", result, j);
+
+                    for (let i = 0; i < next_racers.length; i++) {
+                        racerService.updateRacer(next_racers[i], "Up Next", undefined);
+                    }
+
+                    return;
                 }
-
-                return;
             } else {
                 // If no racers were found for the current race and group
                 console.log("No racers found");
@@ -313,6 +338,8 @@ async function getNextRacers() {
             }
         }
     }
-    console.log("Next Race Type");
-    io.emit("Next Race Type", Object.keys(raceDestinations)[currentRaceType + 1]);
+
+    console.log("Next Race Type 2");
+    let raceName = Object.keys(raceDestinations)[currentRaceType + 1];
+    io.emit("Next Race Type", raceName);
 }

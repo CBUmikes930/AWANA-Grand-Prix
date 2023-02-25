@@ -27,6 +27,10 @@
         </div>
     </div>
 
+    <div class="jumbotron text-center row" id="upNext">
+        <h1 id="upNextText">Up Next: Heat 1</h1>
+    </div>
+
     <div class="col-md-1"></div>
 
     <!-- Create a racer button for each racer passed into the ejs -->
@@ -38,10 +42,6 @@
                 <button style="color: black; <%= (racer === undefined) ? 'display: none' : '' %>" type="button" class="btn racerButton" id="racerButton-<%= i %>"><%= html %></button>
             </div>
         <% } %>
-    </div>
-
-    <div class="jumbotron text-center row" id="upNext">
-        <h1 id="upNextText">Up Next: Heat 1</h1>
     </div>
 </body>
 </html>

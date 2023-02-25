@@ -15,7 +15,7 @@
         </div>
         <!-- Text header to display current race and group -->
         <div class="col-md-6">
-            <h1><strong><span><%= raceName === "Heat 2 Upper" || raceName === "Heat 2 Lower" ? "Heat 2" : raceName %></span><span>Group <%= racers[0].group %></span></strong></h1>
+            <h1><strong><span><%= raceName === "Heat 2 Upper" || raceName === "Heat 2 Lower" ? "Heat 2" : raceName %></span><span>Group <%= racers ? racers[0].group : 1 %></span></strong></h1>
         </div>
         <!-- Right-side checkered flag image using an svg and polygon mask to create an angled cutoff -->
         <div class="col-md-3 header_image_container">
@@ -34,12 +34,14 @@
     <!-- Create a racer button for each racer passed into the ejs -->
     <div class="col-md-4" id="racerButton">
         <% i = 1 %>
-        <% racers.forEach((racer) => { %>
+        <% if (racers) { %>
+            <% racers.forEach((racer) => { %>
             <div class="row">
                 <button style="color: black" type="button" class="btn racerButton" id="racerButton-<%= i %>">#<%= racer.number %>: <%= racer.fname %> <%= racer.lname %></button>
                 <input type="hidden" id="racerID-<%= i++ %>" value="<%= racer._id %>">
             </div>
-        <% }) %>
+            <% }) %>
+        <% } %>
     </div>
 
     <!-- Column spacer -->
