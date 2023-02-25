@@ -106,14 +106,15 @@ let raceDestinations = {
 let currentRaceType = 0;
 let numSemiFinalRaces;
 
-app.route('/reset').get(async (req, res) => {
+app.route('/reset').post(async (req, res) => {
     currentRaceType = 0;
     
     await moveToNextRaceType();
     await getNextRacers();
 
     // Go to race screen
-    res.redirect('/race');
+    //res.redirect('/race');
+    res.send(JSON.stringify("{ result: \"Completed\" }"));
 });
 
 app.route('/race').get(async (req, res) => {
@@ -181,7 +182,6 @@ app.route('/race').get(async (req, res) => {
         await getNextRacers();
 
         return res.render('race', { title: 'Races', static: ".", script: "raceScript.js", racers: null, raceName: Object.keys(raceDestinations)[currentRaceType], numWinners: 0 });
-        //return res.redirect('/race');
     }
 
     let result = await racerService.getWinners();
@@ -224,6 +224,16 @@ app.route('/deleteAllData').delete(async (req, res) => {
     racerService.deleteAllRacers();
     racerService.deleteAllRaces();
     racerService.deleteAllRegisteredUsers();
+
+    max = 0;
+    curRace = 1;
+    curGroup = 1;
+    cur_racers = [];
+    next_racers = [];
+
+    currentRaceType = 0;
+    numSemiFinalRaces = undefined;
+
     res.send({ res: "Deleted" });
 });
 

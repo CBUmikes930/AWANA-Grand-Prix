@@ -117,3 +117,15 @@ function submit_form(group_num) {
         }, 5000);
     }).catch(err => console.log("Error: " + err));
 }
+
+function reset_race() {
+     fetch('/reset', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    }).then(response => response.json())
+    .then(json => {
+        console.log(json);
+    }).catch(err => console.log("Error: " + err));
+}

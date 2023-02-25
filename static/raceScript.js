@@ -75,17 +75,20 @@ function racerButton(number) {
 
 function submitResults() {
     console.log(order);
-
-    fetch('/submitResults', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            raceResults: order
-        })
-    }).then(response => response.json())
-    .then(json => {
+    if (order.length === 0) {
         window.location.reload();
-    }).catch(err => console.log("Error: " + err));
+    } else {
+        fetch('/submitResults', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                raceResults: order
+            })
+        }).then(response => response.json())
+        .then(json => {
+            window.location.reload();
+        }).catch(err => console.log("Error: " + err));
+    }
 }
